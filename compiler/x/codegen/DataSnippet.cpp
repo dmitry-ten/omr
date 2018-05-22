@@ -52,7 +52,17 @@ TR::IA32DataSnippet::addMetaDataForCodeAddress(uint8_t *cursor)
       {
       if (TR::Compiler->target.is64Bit())
          {
-         cg()->jitAddPicToPatchOnClassUnload((void*)-1, (void *) cursor);
+         if (cg()->comp()->compileRelocatableCode() || cg()->comp()->getPersistentInfo()->getJaasMode() == SERVER_MODE)
+            {
+            cg()->addExternalRelocation(new (TR::comp()->trHeapMemory()) 
+                                     TR::ExternalRelocation(cursor, nullptr, TR_ClassUnload, cg()),
+                                     __FILE__, __LINE__, self()->getNode());
+            }
+         else
+            {
+            cg()->jitAddPicToPatchOnClassUnload((void*)-1, (void *) cursor);
+            }
+
          if (cg()->wantToPatchClassPointer(NULL, cursor)) // unresolved
             {
             cg()->jitAddPicToPatchOnClassRedefinition(((void *) -1), (void *) cursor, true);
@@ -60,7 +70,17 @@ TR::IA32DataSnippet::addMetaDataForCodeAddress(uint8_t *cursor)
          }
       else
          {
-         cg()->jitAdd32BitPicToPatchOnClassUnload((void*)-1, (void *) cursor);
+         if (cg()->comp()->compileRelocatableCode() || cg()->comp()->getPersistentInfo()->getJaasMode() == SERVER_MODE)
+            {
+            cg()->addExternalRelocation(new (TR::comp()->trHeapMemory()) 
+                                     TR::ExternalRelocation(cursor, nullptr, TR_ClassUnload, cg()),
+                                     __FILE__, __LINE__, self()->getNode());
+            }
+         else
+            {
+            cg()->jitAdd32BitPicToPatchOnClassUnload((void*)-1, (void *) cursor);
+            }
+
          if (cg()->wantToPatchClassPointer(NULL, cursor)) // unresolved
             {
             cg()->jitAdd32BitPicToPatchOnClassRedefinition(((void *) -1), (void *) cursor, true);

@@ -391,7 +391,7 @@ const char *TR::ExternalRelocation::_externalRelocationTargetKindNames[TR_NumExt
    "TR_RamMethodSequenceReg (23)",
    "TR_VerifyClassObjectForAlloc (24)",
    "TR_ConstantPoolOrderedPair (25)",
-   "TR_AbsoluteMethodAddressOrderedPair (36)",
+   "TR_AbsoluteMethodAddressOrderedPair (26)",
    "TR_VerifyRefArrayForAlloc (27)",
    "TR_J2IThunks (28)",
    "TR_GlobalValue (29)",
@@ -418,11 +418,12 @@ const char *TR::ExternalRelocation::_externalRelocationTargetKindNames[TR_NumExt
    "TR_ValidateArbitraryClass (50)",
    "TR_EmitClass (51)",
    "TR_JNISpecialTargetAddress (52)",
-   "TR_VirtualRamMethodConst (53)"
+   "TR_VirtualRamMethodConst (53)",
    "TR_InlinedInterfaceMethod (54)",
    "TR_InlinedVirtualMethod (55)",
    "TR_NativeMethodAbsolute (56)",
    "TR_NativeMethodRelative (57)",
+   "TR_ClassUnload (58)",
    };
 
 uintptr_t TR::ExternalRelocation::_globalValueList[TR_NumGlobalValueItems] =
