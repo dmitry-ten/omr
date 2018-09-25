@@ -47,6 +47,7 @@ namespace OMR { typedef OMR::SymbolReference SymbolReferenceConnector; }
 #include "infra/Assert.hpp"                  // for TR_ASSERT
 #include "infra/BitVector.hpp"               // for TR_BitVector, Assign, etc
 #include "infra/Flags.hpp"                   // for flags32_t
+#include <execinfo.h>
 
 class TR_Debug;
 class TR_ResolvedMethod;
@@ -60,6 +61,7 @@ template <uint32_t> class TR_NodeAliasSetInterface;
 template <uint32_t> class TR_SymAliasSetInterface;
 typedef TR::SparseBitVector SharedSparseBitVector;
 
+#define BT_BUF_SIZE 10
 // Extra symbol reference info for allocation nodes.
 struct TR_ExtraInfoForNew
    {
@@ -234,7 +236,18 @@ public:
     * Flag functions
     */
 
-   void setUnresolved()                         { _flags.set(Unresolved); }
+   void setUnresolved()
+      { 
+      TR_VerboseLog::vlogAcquire();
+      fprintf(stderr, "\nEntering setUnresolved\n");
+      void *buffer[BT_BUF_SIZE];
+      int nptrs = backtrace(buffer, BT_BUF_SIZE);
+      char **traces = backtrace_symbols(buffer, nptrs);
+      for(int i=0; i<nptrs; i++)
+         fprintf(stderr, "%s\n", traces[i]);
+      TR_VerboseLog::vlogRelease();
+      _flags.set(Unresolved);
+      }
    bool isUnresolved()                          { return _flags.testAny(Unresolved); }
 
    void setCanGCandReturn()                     { _flags.set(CanGCandReturn); }
